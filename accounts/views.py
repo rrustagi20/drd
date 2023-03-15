@@ -144,7 +144,6 @@ def pastConfigurations(request):
                 i.save()
         except:
             pass
-    # print("hy")
 
 @login_required(login_url='login')
 def home(request):
@@ -156,23 +155,16 @@ def home(request):
     items = Item.objects.all()
     today = timezone.now()
     yesterday = today - datetime.timedelta(days=1) 
-    # print(today)
-    # print(yesterday)    
     for i in items:
-        # print (i.start_date)
         i.start_date = i.start_date or today
         i.end_date = i.end_date or today + datetime.timedelta(days=1)
         if(today < i.start_date):
             i.status = "future"
-            # print("past")
         elif (i.start_date <= today < i.end_date and i.status != "past"):
             i.status = "live"
-            # print("future")
         else:
             i.status = "past"
-            # print("live")
         i.save()
-        # print("-------")
     pastConfigurations(request)
     sendMailTowinners(request)
 
@@ -183,23 +175,6 @@ def home(request):
 
     return render(request,"home.html",{'items':items})
 
-# @login_required(login_url='login')
-# def home(request):
-#     items = Item.objects.all()
-#     now = timezone.now()
-#     for i in items:
-#         if now < i.start_date:
-#             i.status = "future"
-#         elif i.start_date <= now < i.end_date:
-#             i.status = "live"
-#         else:
-#             i.status = "past"
-#         i.save()
-#     pastConfigurations(request)
-#     sendMailTowinners(request)
-#     items = Item.objects.filter(status="live")
-#     return render(request,"home.html",{'items':items})
-    
 def logout(request):
     auth.logout(request)
     return redirect("login") 
@@ -211,11 +186,8 @@ def ilogout(request):
 @login_required(login_url='login')
 def myprofile(request):
     bidder = request.user
-    # item_obj = Item.objects.get(highest_bidder=bidder.id)
     details = bidder   
     cuname = details.username
-    # print(cuname)
-    # ,"item_obj":item_obj
     obj = Detail.objects.filter(username=cuname)
     contact=""
     for i in obj:
@@ -236,14 +208,11 @@ def log(request):
         item.save()
 
         try:
-            # print("2")
             winnerid = item.highest_bidder
-            # print(winnerid)
             user_obj = User.objects.get(id=winnerid)
             winnermail = user_obj.email
 
             winuser = user_obj.username
-            # wincon=""
             # -----------------------------------------------------------
             obj = Detail.objects.get(username=winuser)
             wincon = obj.contact
@@ -255,9 +224,7 @@ def log(request):
 
             obj2 = Detail.objects.get(username=itemuser)
             itemcon = obj2.contact
-            # print(itemcon)
-            # print(winnermail)
-            # -------------------------------------------------------------
+            
             # To winner
             # send ownwer contact
             subject = "Online Bidding"
