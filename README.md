@@ -1,4 +1,4 @@
 # drd
 The Boss - Me
 
-Major Contributor and Motivator - Arihant Jha
+Contributors and Motivator - Arihant Jha and Akhsat
